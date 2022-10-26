@@ -14,17 +14,17 @@ export default class Task extends Component {
       });
     };
   }
+
   onSubmit = (event, id) => {
     event.preventDefault();
     this.props.onToggleEdit();
-    //   this.props.onDeleted();
-    //   this.props.onItemAdded(this.state.label);
-    this.props.onChangeLabel(this.state.label);
+    this.props.onEditLabel(this.state.label);
 
     this.setState({
       label: "",
     });
   };
+
   render() {
     const {
       label,

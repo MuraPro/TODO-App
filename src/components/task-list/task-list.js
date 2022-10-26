@@ -8,7 +8,7 @@ const TaskList = ({
   onToggleEdit,
   onItemAdded,
   onDeleted,
-  onChangeLabel,
+  onEditLabel,
 }) => {
   const elements = todos.map((item) => {
     const { id, editing, ...others } = item;
@@ -24,7 +24,7 @@ const TaskList = ({
           onToggleDone={() => onToggleDone(id)}
           onToggleEdit={() => onToggleEdit(id)}
           onItemAdded={onItemAdded}
-          onChangeLabel={(value) => onChangeLabel(id, value)}
+          onEditLabel={(value) => onEditLabel(id, value)}
         />
       </li>
     );

@@ -15,6 +15,7 @@ export default class App extends Component {
     ],
     filter: "all",
   };
+
   createTodoItem(label) {
     return {
       label,
@@ -28,7 +29,6 @@ export default class App extends Component {
   deleteAllItem = () => {
     this.setState(({ todoData }) => {
       const arr = todoData.filter((el) => !el.description);
-
       const newArray = [...arr];
 
       return {
@@ -47,10 +47,12 @@ export default class App extends Component {
       };
     });
   };
+
   ucFirst(str) {
     if (!str) return str;
     return str[0].toUpperCase() + str.slice(1);
   }
+
   addItem = (text) => {
     const newItem = this.createTodoItem(this.ucFirst(text));
     this.setState(({ todoData }) => {
@@ -60,7 +62,8 @@ export default class App extends Component {
       };
     });
   };
-  changeLabel = (id, value) => {
+
+  editLabel = (id, value) => {
     this.setState(({ todoData }) => {
       const newItem = this.createTodoItem(value);
       const idx = todoData.findIndex((item) => item.id === id);
@@ -69,9 +72,7 @@ export default class App extends Component {
         newItem,
         ...todoData.slice(idx + 1),
       ];
-
       return {
-        // todoData: newArray,
         todoData: newData,
       };
     });
@@ -85,6 +86,7 @@ export default class App extends Component {
 
     return [...arr.slice(0, idx), newItem, ...arr.slice(idx + 1)];
   }
+
   onToggleDone = (id) => {
     this.setState(({ todoData }) => {
       return {
@@ -100,9 +102,11 @@ export default class App extends Component {
       };
     });
   };
+
   onFilterChange = (filter) => {
     this.setState({ filter });
   };
+
   filter(items, filter) {
     switch (filter) {
       case "all":
@@ -115,6 +119,7 @@ export default class App extends Component {
         return items;
     }
   }
+
   render() {
     const { todoData, filter } = this.state;
     const visibleItems = this.filter(todoData, filter);
@@ -136,7 +141,7 @@ export default class App extends Component {
               onToggleDone={this.onToggleDone}
               onToggleEdit={this.onToggleEdit}
               onItemAdded={this.addItem}
-              onChangeLabel={this.changeLabel}
+              onEditLabel={this.editLabel}
             />
             <Footer
               toDo={todoCount}
