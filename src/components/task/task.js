@@ -13,26 +13,28 @@ export default class Task extends Component {
         label: event.target.value,
       });
     };
-    this.onSubmit = (event) => {
-      event.preventDefault();
-      this.props.onToggleEdit();
-      this.props.onDeleted();
-      this.props.onItemAdded(this.state.label);
-      this.setState({
-        label: "",
-      });
-    };
   }
+  onSubmit = (event, id) => {
+    event.preventDefault();
+    this.props.onToggleEdit();
+    //   this.props.onDeleted();
+    //   this.props.onItemAdded(this.state.label);
+    this.props.onChangeLabel(this.state.label);
+
+    this.setState({
+      label: "",
+    });
+  };
   render() {
     const {
       label,
+      id,
       onToggleDone,
       onToggleEdit,
       description,
       onDeleted,
       createDate,
     } = this.props;
-    console.log(createDate);
     let classNames = "";
     if (description) {
       classNames += " description";
@@ -42,7 +44,7 @@ export default class Task extends Component {
       <>
         <div className="view">
           <input className="toggle" type="checkbox" />
-          <label>
+          <label key={id}>
             <span className={classNames} onClick={onToggleDone}>
               {label}
             </span>

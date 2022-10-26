@@ -40,7 +40,6 @@ export default class App extends Component {
   deleteItem = (id) => {
     this.setState(({ todoData }) => {
       const idx = todoData.findIndex((el) => el.id === id);
-
       const newArray = [...todoData.slice(0, idx), ...todoData.slice(idx + 1)];
 
       return {
@@ -61,6 +60,23 @@ export default class App extends Component {
       };
     });
   };
+  changeLabel = (id, value) => {
+    this.setState(({ todoData }) => {
+      const newItem = this.createTodoItem(value);
+      const idx = todoData.findIndex((item) => item.id === id);
+      const newData = [
+        ...todoData.slice(0, idx),
+        newItem,
+        ...todoData.slice(idx + 1),
+      ];
+
+      return {
+        // todoData: newArray,
+        todoData: newData,
+      };
+    });
+  };
+
   toggleProperty(arr, id, propName) {
     const idx = arr.findIndex((el) => el.id === id);
 
@@ -69,7 +85,6 @@ export default class App extends Component {
 
     return [...arr.slice(0, idx), newItem, ...arr.slice(idx + 1)];
   }
-
   onToggleDone = (id) => {
     this.setState(({ todoData }) => {
       return {
@@ -121,6 +136,7 @@ export default class App extends Component {
               onToggleDone={this.onToggleDone}
               onToggleEdit={this.onToggleEdit}
               onItemAdded={this.addItem}
+              onChangeLabel={this.changeLabel}
             />
             <Footer
               toDo={todoCount}
