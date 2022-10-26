@@ -11,6 +11,7 @@ export default class Task extends Component {
     this.onLabelChange = (event) => {
       this.setState({
         label: event.target.value,
+        description: false,
       });
     };
   }
@@ -43,7 +44,7 @@ export default class Task extends Component {
     return (
       <>
         <div className="view">
-          <input className="toggle" type="checkbox" />
+          <input className="toggle" type="checkbox" onClick={onToggleDone} />
           <label key={id}>
             <span className={classNames} onClick={onToggleDone}>
               {label}

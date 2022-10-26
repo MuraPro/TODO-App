@@ -94,6 +94,13 @@ export default class App extends Component {
       };
     });
   };
+  //   onToggleCompleted = (id) => {
+  //     this.setState(({ todoData }) => {
+  //       return {
+  //         todoData: this.toggleProperty(todoData, id, "completed"),
+  //       };
+  //     });
+  //   };
 
   onToggleEdit = (id) => {
     this.setState(({ todoData }) => {
