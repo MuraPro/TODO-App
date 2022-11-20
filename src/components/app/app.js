@@ -1,28 +1,57 @@
-import React, { Component } from "react";
-import "./app.css";
-import TaskHeader from "../task-header";
-import NewTaskForm from "../new-task-form";
-import TaskList from "../task-list/task-list";
-import Footer from "../task-footer/footer";
+import React, { Component } from 'react';
+import { nanoid } from 'nanoid';
+import './app.css';
+import TaskHeader from '../task-header';
+import NewTaskForm from '../new-task-form';
+import TaskList from '../task-list/task-list';
+import Footer from '../task-footer/footer';
 
 export default class App extends Component {
-  maxId = 100;
-  state = {
-    todoData: [
-      this.createTodoItem("Completed task"),
-      this.createTodoItem("Editing task"),
-      this.createTodoItem("Active task"),
-    ],
-    filter: "all",
-  };
+  static ucFirst(str) {
+    if (!str) return str;
+    return str[0].toUpperCase() + str.slice(1);
+  }
 
-  createTodoItem(label) {
+  static createTodoItem(label) {
     return {
       label,
       description: false,
       editing: false,
-      id: this.maxId++,
-      createDate: new Date(),
+      id: nanoid(),
+    };
+  }
+
+  static toggleProperty(arr, id, propName) {
+    const idx = arr.findIndex((el) => el.id === id);
+
+    const oldItem = arr[idx];
+    const newItem = { ...oldItem, [propName]: !oldItem[propName] };
+
+    return [...arr.slice(0, idx), newItem, ...arr.slice(idx + 1)];
+  }
+
+  static filter = (items, filter) => {
+    switch (filter) {
+      case 'all':
+        return items;
+      case 'active':
+        return items.filter((item) => !item.description);
+      case 'completed':
+        return items.filter((item) => item.description);
+      default:
+        return items;
+    }
+  };
+
+  constructor() {
+    super();
+    this.state = {
+      todoData: [
+        App.createTodoItem('Completed task'),
+        App.createTodoItem('Editing task'),
+        App.createTodoItem('Active task'),
+      ],
+      filter: 'all',
     };
   }
 
@@ -48,13 +77,8 @@ export default class App extends Component {
     });
   };
 
-  ucFirst(str) {
-    if (!str) return str;
-    return str[0].toUpperCase() + str.slice(1);
-  }
-
   addItem = (text) => {
-    const newItem = this.createTodoItem(this.ucFirst(text));
+    const newItem = App.createTodoItem(App.ucFirst(text));
     this.setState(({ todoData }) => {
       const newArray = [newItem, ...todoData];
       return {
@@ -65,75 +89,38 @@ export default class App extends Component {
 
   editLabel = (id, value) => {
     this.setState(({ todoData }) => {
-      const newItem = this.createTodoItem(value);
+      const newItem = App.createTodoItem(value);
       const idx = todoData.findIndex((item) => item.id === id);
-      const newData = [
-        ...todoData.slice(0, idx),
-        newItem,
-        ...todoData.slice(idx + 1),
-      ];
+      const newData = [...todoData.slice(0, idx), newItem, ...todoData.slice(idx + 1)];
       return {
         todoData: newData,
       };
     });
   };
 
-  toggleProperty(arr, id, propName) {
-    const idx = arr.findIndex((el) => el.id === id);
-
-    const oldItem = arr[idx];
-    const newItem = { ...oldItem, [propName]: !oldItem[propName] };
-
-    return [...arr.slice(0, idx), newItem, ...arr.slice(idx + 1)];
-  }
-
   onToggleDone = (id) => {
-    this.setState(({ todoData }) => {
-      return {
-        todoData: this.toggleProperty(todoData, id, "description"),
-      };
-    });
+    this.setState(({ todoData }) => ({
+      todoData: App.toggleProperty(todoData, id, 'description'),
+    }));
   };
-  //   onToggleCompleted = (id) => {
-  //     this.setState(({ todoData }) => {
-  //       return {
-  //         todoData: this.toggleProperty(todoData, id, "completed"),
-  //       };
-  //     });
-  //   };
 
   onToggleEdit = (id) => {
-    this.setState(({ todoData }) => {
-      return {
-        todoData: this.toggleProperty(todoData, id, "editing"),
-      };
-    });
+    this.setState(({ todoData }) => ({
+      todoData: App.toggleProperty(todoData, id, 'editing'),
+    }));
   };
 
   onFilterChange = (filter) => {
     this.setState({ filter });
   };
 
-  filter(items, filter) {
-    switch (filter) {
-      case "all":
-        return items;
-      case "active":
-        return items.filter((item) => !item.description);
-      case "completed":
-        return items.filter((item) => item.description);
-      default:
-        return items;
-    }
-  }
-
   render() {
     const { todoData, filter } = this.state;
-    const visibleItems = this.filter(todoData, filter);
-    const doneCount = todoData.filter(
-      (el) => el.description || el.editing
-    ).length;
+    const visibleItems = App.filter(todoData, filter);
+    const doneCount = todoData.filter((el) => el.description || el.editing).length;
+
     const todoCount = todoData.length - doneCount;
+
     return (
       <div className="wrapper">
         <section className="app">
@@ -150,6 +137,7 @@ export default class App extends Component {
               onItemAdded={this.addItem}
               onEditLabel={this.editLabel}
             />
+
             <Footer
               toDo={todoCount}
               onAllDeleted={this.deleteAllItem}

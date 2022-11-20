@@ -1,2 +1,3 @@
-import Footer from "./app";
+import Footer from './footer';
+
 export default Footer;
