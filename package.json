@@ -68,8 +68,8 @@
   "lint-staged": {
     "src/**/*.{js,jsx}": [
       "npm run lint:fix",
-      "git add"
-    ],
-    "*.{js,html,css,md}": "prettier --write"
+      "git add",
+      "prettier --write"
+    ]
   }
 }
