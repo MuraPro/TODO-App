@@ -66,10 +66,10 @@
     }
   },
   "lint-staged": {
-    "*.{js,html,css,md}": "prettier --write",
     "src/**/*.{js,jsx}": [
       "npm run lint:fix",
       "git add"
-    ]
+    ],
+    "*.{js,html,css,md}": "prettier --write"
   }
 }
