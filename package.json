@@ -18,7 +18,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test --passWithNoTests",
     "eject": "react-scripts eject",
-    "format": "prettier \"src/**/*.{js,jsx,html,css}\"",
+    "format": "prettier \"src/**/*.{js,html,css}\"",
     "lint": "eslint \"src/**/*.{js,jsx}\"",
     "lint:fix": "eslint \"src/**/*.{js,jsx}\" --fix",
     "prepare": "husky install"
@@ -61,12 +61,15 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "lint-staged"
+      "pre-commit": "lint-staged",
+      "pre-push": "lint-staged"
     }
   },
   "lint-staged": {
-    "src/**/*.{js,jsx,ts,tsx}": [
-      "npm run lint:fix"
+    "src/**/*.{js,html,css}": "prettier",
+    "src/**/*.{js,jsx}": [
+      "npm run lint:fix",
+      "git add"
     ]
   }
 }
