@@ -18,10 +18,10 @@
     "build": "react-scripts build",
     "test": "react-scripts test --passWithNoTests",
     "eject": "react-scripts eject",
-    "format": "prettier \"src/**/*.{js,html,css}\"",
     "lint": "eslint \"src/**/*.{js,jsx}\"",
     "lint:fix": "eslint \"src/**/*.{js,jsx}\" --fix",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "format": "prettier \"src/**/*.{js,jsx}\" --write"
   },
   "eslintConfig": {
     "extends": [
@@ -66,10 +66,10 @@
     }
   },
   "lint-staged": {
-    "src/**/*.{js,jsx}": [
+    "src/*.{js,jsx}": [
       "npm run lint:fix",
-      "git add",
-      "prettier"
+      "prettier",
+      "git add"
     ]
   }
 }
