@@ -18,10 +18,10 @@
     "build": "react-scripts build",
     "test": "react-scripts test --passWithNoTests",
     "eject": "react-scripts eject",
+    "format": "prettier \"src/**/*.{js,jsx,html,css}\"",
     "lint": "eslint \"src/**/*.{js,jsx}\"",
     "lint:fix": "eslint \"src/**/*.{js,jsx}\" --fix",
-    "prepare": "husky install",
-    "format": "prettier \"src/**/*.{js,jsx,html,css}\""
+    "prepare": "husky install"
   },
   "eslintConfig": {
     "extends": [
