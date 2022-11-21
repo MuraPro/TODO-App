@@ -20,7 +20,8 @@
     "eject": "react-scripts eject",
     "lint": "eslint \"src/**/*.{js,jsx}\"",
     "lint:fix": "eslint \"src/**/*.{js,jsx}\" --fix",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "format": "prettier \"src/**/*.{js,jsx}\""
   },
   "eslintConfig": {
     "extends": [
