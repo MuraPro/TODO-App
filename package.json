@@ -21,7 +21,7 @@
     "lint": "eslint \"src/**/*.{js,jsx}\"",
     "lint:fix": "eslint \"src/**/*.{js,jsx}\" --fix",
     "prepare": "husky install",
-    "format": "prettier \"src/**/*.{js,jsx}\""
+    "format": "prettier \"src/**/*.{js,jsx,html,css}\""
   },
   "eslintConfig": {
     "extends": [
