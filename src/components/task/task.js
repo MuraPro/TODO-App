@@ -33,7 +33,7 @@ export default class Task extends Component {
 
   render() {
     const { createDate, label } = this.state;
-    const { id, onToggleDone, onToggleEdit, description, onDeleted, htmlFor } = this.props;
+    const { id, onToggleEdit, onToggleDone, description, onDeleted } = this.props;
     let classNames = '';
     if (description) {
       classNames += ' description';
@@ -41,8 +41,8 @@ export default class Task extends Component {
     return (
       <>
         <div className="view">
-          <input className="toggle" type="checkbox" id="todo" onClick={onToggleDone} />
-          <label key={id} htmlFor={htmlFor}>
+          <input className="toggle" type="checkbox" onClick={onToggleDone} />
+          <label key={id} htmlFor="todo">
             <span className={classNames} onClick={onToggleDone}>
               {label}
             </span>

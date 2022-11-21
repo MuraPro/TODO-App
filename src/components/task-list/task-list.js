@@ -14,7 +14,6 @@ function TaskList({ todos, onToggleDone, onToggleEdit, onDeleted, onEditLabel })
       <li key={id} className={classNames}>
         <Task
           {...others}
-          htmFor="todo"
           onDeleted={() => onDeleted(id)}
           onToggleDone={() => onToggleDone(id)}
           onToggleEdit={() => onToggleEdit(id)}
