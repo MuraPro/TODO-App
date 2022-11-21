@@ -34,8 +34,6 @@
     "no-tabs": "off",
     "no-alert": "off",
     "prefer-destructuring": "warn",
-    "no-unused-vars": "warn",
-    "indent": [2, "tab"],
     "prettier/prettier": ["error"],
     "max-len": ["error", 120, { "ignoreUrls": true }],
     "react/no-unused-prop-types": "off",
@@ -54,5 +52,10 @@
         "allowChildren": false
       }
     ]
+  },
+  "settings": {
+    "react": {
+      "version": "detect"
+    }
   }
 }
