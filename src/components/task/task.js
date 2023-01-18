@@ -20,12 +20,12 @@ export default class Task extends Component {
   }
 
   onSubmit = (event) => {
-    const { onToggleEdit, onEditLabel } = this.props;
+    const { onToggleEdit, onEditLabel, minutes, seconds } = this.props;
     const { label } = this.state;
 
     event.preventDefault();
     onToggleEdit();
-    onEditLabel(label);
+    onEditLabel(label, minutes, seconds);
 
     this.setState({
       label: '',
@@ -34,7 +34,7 @@ export default class Task extends Component {
 
   render() {
     const { createDate, label } = this.state;
-    const { id, onToggleEdit, onToggleDone, description, onDeleted, minutes, seconds, countDown } =
+    const { id, onToggleEdit, onToggleDone, description, onDeleted, countDown, minutes, seconds } =
       this.props;
     let classNames = ' ';
     if (description) {

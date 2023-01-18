@@ -119,9 +119,9 @@ export default class App extends Component {
     });
   };
 
-  editLabel = (id, value) => {
+  editLabel = (id, value, minutes, seconds) => {
     this.setState(({ todoData }) => {
-      const newItem = App.createTodoItem(value);
+      const newItem = App.createTodoItem(value, minutes, seconds);
       const idx = todoData.findIndex((item) => item.id === id);
       const newData = [...todoData.slice(0, idx), newItem, ...todoData.slice(idx + 1)];
       return {

@@ -17,7 +17,7 @@ function TaskList({ todos, onToggleDone, onToggleEdit, onDeleted, onEditLabel, c
           onDeleted={() => onDeleted(id)}
           onToggleDone={() => onToggleDone(id)}
           onToggleEdit={() => onToggleEdit(id)}
-          onEditLabel={(value) => onEditLabel(id, value)}
+          onEditLabel={(value) => onEditLabel(id, value, minutes, seconds)}
           countDown={() => countDown(id)}
           minutes={minutes}
           seconds={seconds}
