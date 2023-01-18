@@ -3,9 +3,9 @@ import './task-list.css';
 import PropTypes from 'prop-types';
 import Task from '../task';
 
-function TaskList({ todos, onToggleDone, onToggleEdit, onDeleted, onEditLabel }) {
+function TaskList({ todos, onToggleDone, onToggleEdit, onDeleted, onEditLabel, countDown }) {
   const elements = todos.map((item) => {
-    const { id, editing, ...others } = item;
+    const { id, editing, minutes, seconds, ...others } = item;
     let classNames = 'completed';
     if (editing) {
       classNames = 'editing';
@@ -18,6 +18,9 @@ function TaskList({ todos, onToggleDone, onToggleEdit, onDeleted, onEditLabel })
           onToggleDone={() => onToggleDone(id)}
           onToggleEdit={() => onToggleEdit(id)}
           onEditLabel={(value) => onEditLabel(id, value)}
+          countDown={() => countDown(id)}
+          minutes={minutes}
+          seconds={seconds}
         />
       </li>
     );
@@ -26,6 +29,8 @@ function TaskList({ todos, onToggleDone, onToggleEdit, onDeleted, onEditLabel })
   return <ul className="todo-list">{elements}</ul>;
 }
 
+export default TaskList;
+
 TaskList.defaultProps = {
   id: 0,
   editing: false,
@@ -33,6 +38,7 @@ TaskList.defaultProps = {
   onToggleDone: () => {},
   onToggleEdit: () => {},
   onEditLabel: () => {},
+  countDown: () => {},
 };
 
 TaskList.propTypes = {
@@ -42,6 +48,5 @@ TaskList.propTypes = {
   onToggleDone: PropTypes.func,
   onToggleEdit: PropTypes.func,
   onEditLabel: PropTypes.func,
+  countDown: PropTypes.func,
 };
-
-export default TaskList;

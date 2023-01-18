@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import './task.css';
 import { formatDistanceToNow } from 'date-fns';
 import PropTypes from 'prop-types';
+import TaskTimer from '../task-timer';
 
 export default class Task extends Component {
   constructor(props) {
@@ -33,8 +34,9 @@ export default class Task extends Component {
 
   render() {
     const { createDate, label } = this.state;
-    const { id, onToggleEdit, onToggleDone, description, onDeleted } = this.props;
-    let classNames = '';
+    const { id, onToggleEdit, onToggleDone, description, onDeleted, minutes, seconds, countDown } =
+      this.props;
+    let classNames = ' ';
     if (description) {
       classNames += ' description';
     }
@@ -46,6 +48,7 @@ export default class Task extends Component {
             <span className={classNames} onClick={onToggleDone}>
               {label}
             </span>
+            <TaskTimer minutes={minutes} seconds={seconds} countDown={countDown} />
             <span className="created">
               {`created  ${formatDistanceToNow(createDate, {
                 includeSeconds: true,
@@ -77,4 +80,5 @@ Task.propTypes = {
   onToggleEdit: PropTypes.func.isRequired,
   onEditLabel: PropTypes.func.isRequired,
   onDeleted: PropTypes.func.isRequired,
+  countDown: PropTypes.func.isRequired,
 };

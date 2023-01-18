@@ -8,12 +8,18 @@ export default class TaskEdit extends Component {
     return str[0].toUpperCase() + str.slice(1);
   }
 
-  constructor(props) {
-    super(props);
+  constructor() {
+    super();
     this.state = {
       label: '',
+      minutes: '',
+      seconds: '',
     };
   }
+
+  inputHandler = (e) => {
+    this.setState({ [e.target.name]: e.target.value });
+  };
 
   onLabelChange = (event) => {
     this.setState({
@@ -23,27 +29,53 @@ export default class TaskEdit extends Component {
 
   onSubmit = (event) => {
     const { onItemAdded } = this.props;
-    const { label } = this.state;
+    const { label, minutes, seconds } = this.state;
     event.preventDefault();
-    if (label.length > 0) {
-      onItemAdded(label);
-      this.setState({
-        label: '',
-      });
+    if (event.keyCode === 13) {
+      if (label.length > 0) {
+        onItemAdded(label, minutes, seconds);
+        this.setState({
+          label: '',
+          minutes: '',
+          seconds: '',
+        });
+      }
     }
   };
 
   render() {
-    const { label } = this.state;
+    const { label, minutes, seconds } = this.state;
+
     return (
-      <form className="new-task-form" onSubmit={this.onSubmit}>
-        <input
-          className="new-task-input"
-          placeholder="What needs to be done?"
-          onChange={this.onLabelChange}
-          value={label}
-        />
-      </form>
+      <div>
+        <form className="new-todo-form" onSubmit={this.onSubmit}>
+          <input
+            className="new-todo"
+            placeholder="What needs to be done?"
+            onChange={this.onLabelChange}
+            value={label}
+            onKeyUp={this.onSubmit}
+          />
+        </form>
+        <form>
+          <input
+            className="InputMin"
+            placeholder="Min"
+            value={minutes}
+            name="minutes"
+            onChange={this.inputHandler}
+            onKeyUp={this.onSubmit}
+          />
+          <input
+            className="InputSec"
+            placeholder="Sec"
+            value={seconds}
+            name="seconds"
+            onChange={this.inputHandler}
+            onKeyUp={this.onSubmit}
+          />
+        </form>
+      </div>
     );
   }
 }
