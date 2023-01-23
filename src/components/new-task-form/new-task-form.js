@@ -15,10 +15,18 @@ export default class TaskEdit extends Component {
       minutes: '',
       seconds: '',
     };
+
+    this.minutesInput = React.createRef();
+    this.secondsInput = React.createRef();
+  }
+
+  componentDidMount() {
+    this.minutesInput.current.focus();
   }
 
   inputHandler = (e) => {
-    this.setState({ [e.target.name]: e.target.value });
+    const reg = /[A-Za-zA-Яа-яЁё]/g;
+    this.setState({ [e.target.name]: e.target.value.replace(reg, '').substr(0, 2) });
   };
 
   onLabelChange = (event) => {
@@ -61,18 +69,22 @@ export default class TaskEdit extends Component {
           <input
             className="InputMin"
             placeholder="Min"
+            ref={this.minutesInput}
             value={minutes}
             name="minutes"
             onChange={this.inputHandler}
             onKeyUp={this.onSubmit}
+            pattern="^[ 0-9]+$"
           />
           <input
             className="InputSec"
             placeholder="Sec"
+            ref={this.secondsInput}
             value={seconds}
             name="seconds"
             onChange={this.inputHandler}
             onKeyUp={this.onSubmit}
+            pattern="^[ 0-9]+$"
           />
         </form>
       </div>

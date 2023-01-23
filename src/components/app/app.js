@@ -16,7 +16,7 @@ export default class App extends Component {
     return str[0].toUpperCase() + str.slice(1);
   }
 
-  static createTodoItem(label, minutes = 0, seconds = 0) {
+  static createTodoItem(label, minutes = 1, seconds = 0) {
     return {
       label,
       description: false,
@@ -58,6 +58,7 @@ export default class App extends Component {
         App.createTodoItem('Active task'),
       ],
       filter: 'all',
+      timer: true,
     };
   }
 
@@ -137,8 +138,9 @@ export default class App extends Component {
   };
 
   onToggleEdit = (id) => {
-    this.setState(({ todoData }) => ({
+    this.setState(({ todoData, timer }) => ({
       todoData: App.toggleProperty(todoData, id, 'editing'),
+      timer: !timer,
     }));
   };
 
@@ -147,7 +149,7 @@ export default class App extends Component {
   };
 
   render() {
-    const { todoData, filter } = this.state;
+    const { todoData, filter, timer } = this.state;
     const visibleItems = App.filter(todoData, filter);
     const doneCount = todoData.filter((el) => el.description || el.editing).length;
 
@@ -169,6 +171,7 @@ export default class App extends Component {
               onItemAdded={this.addItem}
               onEditLabel={this.editLabel}
               countDown={this.countDown}
+              timer={timer}
             />
 
             <Footer

@@ -3,13 +3,14 @@ import './task-list.css';
 import PropTypes from 'prop-types';
 import Task from '../task';
 
-function TaskList({ todos, onToggleDone, onToggleEdit, onDeleted, onEditLabel, countDown }) {
+function TaskList({ todos, onToggleDone, onToggleEdit, onDeleted, onEditLabel, countDown, timer }) {
   const elements = todos.map((item) => {
     const { id, editing, minutes, seconds, ...others } = item;
     let classNames = 'completed';
     if (editing) {
       classNames = 'editing';
     }
+
     return (
       <li key={id} className={classNames}>
         <Task
@@ -21,11 +22,12 @@ function TaskList({ todos, onToggleDone, onToggleEdit, onDeleted, onEditLabel, c
           countDown={() => countDown(id)}
           minutes={minutes}
           seconds={seconds}
+          editing={editing}
+          timer={timer}
         />
       </li>
     );
   });
-
   return <ul className="todo-list">{elements}</ul>;
 }
 

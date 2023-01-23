@@ -3,6 +3,13 @@ import './task-timer.css';
 import PropTypes from 'prop-types';
 
 export default class TaskTimer extends Component {
+  componentDidUpdate(prevProps) {
+    const { timer } = this.props;
+    if (timer !== prevProps.timer) {
+      this.stopTimer();
+    }
+  }
+
   startTimer = () => {
     clearInterval(this.timer);
     const { countDown } = this.props;
@@ -30,7 +37,7 @@ export default class TaskTimer extends Component {
           className="icon icon-pause"
           data-action="pause"
         />
-        ` {minutes || 0}:{seconds || 0}
+        ` {minutes}:{seconds}
       </span>
     );
   }
