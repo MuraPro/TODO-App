@@ -22,6 +22,7 @@ export default class App extends Component {
       description: false,
       editing: false,
       id: nanoid(),
+      timer: true,
       minutes: Number(minutes),
       seconds: Number(seconds),
     };
@@ -58,7 +59,6 @@ export default class App extends Component {
         App.createTodoItem('Active task'),
       ],
       filter: 'all',
-      timer: true,
     };
   }
 
@@ -68,7 +68,7 @@ export default class App extends Component {
       const elem = todoData.find((el) => el.id === id);
       const second = App.convertToSeconds(elem.minutes, elem.seconds);
 
-      if (second) {
+      if (second && elem.timer) {
         if (elem.seconds) {
           elem.seconds -= 1;
         } else {
@@ -135,12 +135,17 @@ export default class App extends Component {
     this.setState(({ todoData }) => ({
       todoData: App.toggleProperty(todoData, id, 'description'),
     }));
+    this.setState(({ todoData }) => ({
+      todoData: App.toggleProperty(todoData, id, 'timer'),
+    }));
   };
 
   onToggleEdit = (id) => {
-    this.setState(({ todoData, timer }) => ({
+    this.setState(({ todoData }) => ({
       todoData: App.toggleProperty(todoData, id, 'editing'),
-      timer: !timer,
+    }));
+    this.setState(({ todoData }) => ({
+      todoData: App.toggleProperty(todoData, id, 'timer'),
     }));
   };
 
@@ -149,7 +154,8 @@ export default class App extends Component {
   };
 
   render() {
-    const { todoData, filter, timer } = this.state;
+    const { todoData, filter } = this.state;
+
     const visibleItems = App.filter(todoData, filter);
     const doneCount = todoData.filter((el) => el.description || el.editing).length;
 
@@ -171,7 +177,6 @@ export default class App extends Component {
               onItemAdded={this.addItem}
               onEditLabel={this.editLabel}
               countDown={this.countDown}
-              timer={timer}
             />
 
             <Footer

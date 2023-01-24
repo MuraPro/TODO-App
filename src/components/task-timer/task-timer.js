@@ -4,8 +4,7 @@ import PropTypes from 'prop-types';
 
 export default class TaskTimer extends Component {
   componentDidUpdate(prevProps) {
-    const { timer } = this.props;
-    if (timer !== prevProps.timer) {
+    if (prevProps.timer === false) {
       this.stopTimer();
     }
   }
