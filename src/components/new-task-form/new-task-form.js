@@ -16,12 +16,11 @@ export default class TaskEdit extends Component {
       seconds: '',
     };
 
-    this.minutesInput = React.createRef();
-    this.secondsInput = React.createRef();
+    this.editInput = React.createRef();
   }
 
   componentDidMount() {
-    this.minutesInput.current.focus();
+    this.editInput.current.focus();
   }
 
   inputHandler = (e) => {
@@ -39,6 +38,13 @@ export default class TaskEdit extends Component {
     const { onItemAdded } = this.props;
     const { label, minutes, seconds } = this.state;
     event.preventDefault();
+    if (event.keyCode === 27) {
+      this.setState({
+        label: '',
+        minutes: '',
+        seconds: '',
+      });
+    }
     if (event.keyCode === 13) {
       if (label.length > 0) {
         onItemAdded(label, minutes, seconds);
@@ -60,6 +66,7 @@ export default class TaskEdit extends Component {
           <input
             className="new-todo"
             placeholder="What needs to be done?"
+            ref={this.editInput}
             onChange={this.onLabelChange}
             value={label}
             onKeyUp={this.onSubmit}
@@ -69,7 +76,6 @@ export default class TaskEdit extends Component {
           <input
             className="InputMin"
             placeholder="Min"
-            ref={this.minutesInput}
             value={minutes}
             name="minutes"
             onChange={this.inputHandler}
@@ -79,7 +85,6 @@ export default class TaskEdit extends Component {
           <input
             className="InputSec"
             placeholder="Sec"
-            ref={this.secondsInput}
             value={seconds}
             name="seconds"
             onChange={this.inputHandler}
