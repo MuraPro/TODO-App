@@ -1,6 +1,6 @@
 # Визуальная часть Todo App:
 
-https://venerable-cassata-8af7de.netlify.app/
+https://sensational-halva-df70ca.netlify.app
 
 1. npm run start
 2. npm run format
