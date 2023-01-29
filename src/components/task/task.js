@@ -41,9 +41,12 @@ export default class Task extends Component {
     });
   };
 
-  onKeyup = (event) => {
-    const { onToggleEdit } = this.props;
+  onKeyUp = (event) => {
+    const { onToggleEdit, label } = this.props;
     if (event.keyCode === 27) {
+      this.setState({
+        label,
+      });
       onToggleEdit();
     }
   };
@@ -74,7 +77,7 @@ export default class Task extends Component {
             <span className={classNames} onClick={onToggleDone}>
               {label}
             </span>
-            <TaskTimer minutes={minutes} seconds={seconds} countDown={countDown} timer={timer} />
+            <TaskTimer minutes={minutes} seconds={seconds} timer={timer} countDown={countDown} />
             <span className="created">
               {`created  ${formatDistanceToNow(createDate, {
                 includeSeconds: true,
@@ -92,7 +95,7 @@ export default class Task extends Component {
             ref={this.editInput}
             onChange={this.onLabelChange}
             value={label}
-            onKeyUp={this.onKeyup}
+            onKeyUp={this.onKeyUp}
           />
         </form>
       </>

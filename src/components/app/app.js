@@ -7,7 +7,7 @@ import TaskList from '../task-list/task-list';
 import Footer from '../task-footer/footer';
 
 export default class App extends Component {
-  static convertToSeconds(minutes, seconds) {
+  static convertToSeconds(minutes = 0, seconds = 0) {
     return seconds + minutes * 60;
   }
 
@@ -102,6 +102,7 @@ export default class App extends Component {
   deleteItem = (id) => {
     this.setState(({ todoData }) => {
       const idx = todoData.findIndex((el) => el.id === id);
+
       const newArray = [...todoData.slice(0, idx), ...todoData.slice(idx + 1)];
 
       return {

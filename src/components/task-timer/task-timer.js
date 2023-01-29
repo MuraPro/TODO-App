@@ -9,14 +9,18 @@ export default class TaskTimer extends Component {
     }
   }
 
-  startTimer = () => {
-    clearInterval(this.timer);
-    const { countDown } = this.props;
-    this.timer = setInterval(countDown, 1000);
-  };
+  componentWillUnmount() {
+    this.stopTimer();
+  }
 
   stopTimer = () => {
     clearInterval(this.timer);
+  };
+
+  startTimer = () => {
+    const { countDown } = this.props;
+    clearInterval(this.timer);
+    this.timer = setInterval(countDown, 1000);
   };
 
   render() {
@@ -48,7 +52,6 @@ TaskTimer.defaultProps = {
 };
 
 TaskTimer.propTypes = {
-  countDown: PropTypes.func.isRequired,
   minutes: PropTypes.number,
   seconds: PropTypes.number,
 };
