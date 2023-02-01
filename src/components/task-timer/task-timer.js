@@ -47,11 +47,12 @@ export default class TaskTimer extends Component {
 }
 
 TaskTimer.defaultProps = {
-  minutes: 0,
+  minutes: 1,
   seconds: 0,
 };
 
 TaskTimer.propTypes = {
   minutes: PropTypes.number,
   seconds: PropTypes.number,
+  countDown: PropTypes.func.isRequired,
 };

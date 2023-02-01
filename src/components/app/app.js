@@ -136,9 +136,6 @@ export default class App extends Component {
     this.setState(({ todoData }) => ({
       todoData: App.toggleProperty(todoData, id, 'description'),
     }));
-    this.setState(({ todoData }) => ({
-      todoData: App.toggleProperty(todoData, id, 'timer'),
-    }));
   };
 
   onToggleEdit = (id) => {
