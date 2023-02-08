@@ -53,17 +53,20 @@ export default class Task extends Component {
 
   render() {
     const { createDate, label } = this.state;
+
     const {
       id,
       onToggleEdit,
       onToggleDone,
       description,
       onDeleted,
-      countDown,
       minutes,
       seconds,
       timer,
+      stopTimer,
+      startTimer,
     } = this.props;
+
     let classNames = ' ';
     if (description) {
       classNames += ' description';
@@ -77,7 +80,13 @@ export default class Task extends Component {
             <span className={classNames} onClick={onToggleDone}>
               {label}
             </span>
-            <TaskTimer minutes={minutes} seconds={seconds} timer={timer} countDown={countDown} />
+            <TaskTimer
+              minutes={minutes}
+              seconds={seconds}
+              timer={timer}
+              stopTimer={stopTimer}
+              startTimer={startTimer}
+            />
             <span className="created">
               {`created  ${formatDistanceToNow(createDate, {
                 includeSeconds: true,
@@ -117,5 +126,4 @@ Task.propTypes = {
   onToggleEdit: PropTypes.func.isRequired,
   onEditLabel: PropTypes.func.isRequired,
   onDeleted: PropTypes.func.isRequired,
-  countDown: PropTypes.func.isRequired,
 };

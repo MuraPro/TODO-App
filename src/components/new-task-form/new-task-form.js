@@ -3,13 +3,8 @@ import './new-task-form.css';
 import PropTypes from 'prop-types';
 
 export default class TaskEdit extends Component {
-  static ucFirst(str) {
-    if (!str) return str;
-    return str[0].toUpperCase() + str.slice(1);
-  }
-
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = {
       label: '',
       minutes: '',
@@ -30,7 +25,7 @@ export default class TaskEdit extends Component {
 
   onLabelChange = (event) => {
     this.setState({
-      label: TaskEdit.ucFirst(event.target.value),
+      label: event.target.value,
     });
   };
 

@@ -25,6 +25,7 @@ export default class App extends Component {
       timer: true,
       minutes: Number(minutes),
       seconds: Number(seconds),
+      timerId: null,
     };
   }
 
@@ -79,7 +80,7 @@ export default class App extends Component {
           elem.minutes -= 1;
         }
       } else {
-        clearInterval(this.timer);
+        elem.timer = false;
       }
       const newData = [...todoData.slice(0, idx), elem, ...todoData.slice(idx + 1)];
       return {
@@ -88,11 +89,39 @@ export default class App extends Component {
     });
   };
 
+  startTimer = (id) => {
+    this.setState(({ todoData }) => {
+      const elem = todoData.find((el) => el.id === id);
+      clearInterval(elem.timerId);
+      elem.timerId = setInterval(() => this.countDown(id), 1000);
+
+      const newArray = [...todoData];
+
+      return {
+        todoData: newArray,
+      };
+    });
+  };
+
+  stopTimer = (id) => {
+    this.setState(({ todoData }) => {
+      const elem = todoData.find((el) => el.id === id);
+      clearInterval(elem.timerId);
+
+      const newArray = [...todoData];
+
+      return {
+        todoData: newArray,
+      };
+    });
+  };
+
   deleteAllItem = () => {
     this.setState(({ todoData }) => {
+      todoData.forEach((elem) => clearInterval(elem.timerId));
       const arr = todoData.filter((el) => !el.description);
       const newArray = [...arr];
-
+      todoData.forEach((elem) => clearInterval(elem.timerId));
       return {
         todoData: newArray,
       };
@@ -102,6 +131,8 @@ export default class App extends Component {
   deleteItem = (id) => {
     this.setState(({ todoData }) => {
       const idx = todoData.findIndex((el) => el.id === id);
+      const elem = todoData.find((el) => el.id === id);
+      clearInterval(elem.timerId);
 
       const newArray = [...todoData.slice(0, idx), ...todoData.slice(idx + 1)];
 
@@ -123,6 +154,8 @@ export default class App extends Component {
 
   editLabel = (id, value, minutes, seconds) => {
     this.setState(({ todoData }) => {
+      const elem = todoData.find((el) => el.id === id);
+      clearInterval(elem.timerId);
       const newItem = App.createTodoItem(value, minutes, seconds);
       const idx = todoData.findIndex((item) => item.id === id);
       const newData = [...todoData.slice(0, idx), newItem, ...todoData.slice(idx + 1)];
@@ -174,7 +207,8 @@ export default class App extends Component {
               onToggleEdit={this.onToggleEdit}
               onItemAdded={this.addItem}
               onEditLabel={this.editLabel}
-              countDown={this.countDown}
+              stopTimer={this.stopTimer}
+              startTimer={this.startTimer}
             />
 
             <Footer
