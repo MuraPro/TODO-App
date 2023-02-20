@@ -8,11 +8,18 @@ export default class Task extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      label: props.label,
+      label: '',
       createDate: new Date(),
     };
 
     this.editInput = React.createRef();
+  }
+
+  componentDidMount() {
+    const { label } = this.props;
+    this.setState({
+      label,
+    });
   }
 
   componentDidUpdate(prevProps) {

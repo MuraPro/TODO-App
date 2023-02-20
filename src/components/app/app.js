@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import { nanoid } from 'nanoid';
-import './app.css';
 import TaskHeader from '../task-header';
 import NewTaskForm from '../new-task-form';
 import TaskList from '../task-list/task-list';
 import Footer from '../task-footer/footer';
+import './app.css';
 
 export default class App extends Component {
   static convertToSeconds(minutes = 0, seconds = 0) {
@@ -186,10 +186,8 @@ export default class App extends Component {
 
   render() {
     const { todoData, filter } = this.state;
-
     const visibleItems = App.filter(todoData, filter);
     const doneCount = todoData.filter((el) => el.description || el.editing).length;
-
     const todoCount = todoData.length - doneCount;
 
     return (
@@ -207,8 +205,8 @@ export default class App extends Component {
               onToggleEdit={this.onToggleEdit}
               onItemAdded={this.addItem}
               onEditLabel={this.editLabel}
-              stopTimer={this.stopTimer}
               startTimer={this.startTimer}
+              stopTimer={this.stopTimer}
             />
 
             <Footer
