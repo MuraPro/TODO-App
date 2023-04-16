@@ -1,19 +1,15 @@
 import React from 'react';
-import './task-list.css';
 import PropTypes from 'prop-types';
 import Task from '../task';
+import './task-list.css';
 
-function TaskList({
-  todos,
-  onToggleDone,
-  onToggleEdit,
-  onDeleted,
-  onEditLabel,
-  stopTimer,
-  startTimer,
-}) {
+function TaskList(props) {
+  const { todos, onToggleDone, onToggleEdit, onDeleted, onEditLabel, stopTimer, startTimer } =
+    props;
+
   const elements = todos.map((item) => {
     const { id, editing, minutes, seconds, ...others } = item;
+
     let classNames = 'completed';
     if (editing) {
       classNames = 'editing';
@@ -36,6 +32,7 @@ function TaskList({
       </li>
     );
   });
+
   return <ul className="todo-list">{elements}</ul>;
 }
 
@@ -48,6 +45,8 @@ TaskList.defaultProps = {
   onToggleDone: () => {},
   onToggleEdit: () => {},
   onEditLabel: () => {},
+  startTimer: () => {},
+  stopTimer: () => {},
 };
 
 TaskList.propTypes = {
@@ -57,4 +56,6 @@ TaskList.propTypes = {
   onToggleDone: PropTypes.func,
   onToggleEdit: PropTypes.func,
   onEditLabel: PropTypes.func,
+  startTimer: PropTypes.func,
+  stopTimer: PropTypes.func,
 };

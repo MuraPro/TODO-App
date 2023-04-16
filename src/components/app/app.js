@@ -1,45 +1,51 @@
-import React, { Component } from 'react';
+import React, { useState } from 'react';
 import { nanoid } from 'nanoid';
+import Compos from '../helpers';
 import TaskHeader from '../task-header';
 import NewTaskForm from '../new-task-form';
 import TaskList from '../task-list/task-list';
 import Footer from '../task-footer/footer';
 import './app.css';
 
-export default class App extends Component {
-  static convertToSeconds(minutes = 0, seconds = 0) {
-    return seconds + minutes * 60;
-  }
+function App() {
+  const createTodoItem = (label, minutes = 1, seconds = 0) => ({
+    label,
+    description: false,
+    editing: false,
+    id: nanoid(),
+    timer: true,
+    minutes: Number(minutes),
+    seconds: Number(seconds),
+    timerId: null,
+  });
 
-  static ucFirst(str) {
+  const [task, setTask] = useState([
+    createTodoItem('Completed task'),
+    createTodoItem('Editing task'),
+    createTodoItem('Active task'),
+  ]);
+  Array.from(task);
+
+  const [filters, setFilter] = useState('all');
+
+  const convertToSeconds = (minutes = 0, seconds = 0) => seconds + minutes * 60;
+
+  const ucFirst = (str) => {
     if (!str) return str;
     return str[0].toUpperCase() + str.slice(1);
-  }
+  };
 
-  static createTodoItem(label, minutes = 1, seconds = 0) {
-    return {
-      label,
-      description: false,
-      editing: false,
-      id: nanoid(),
-      timer: true,
-      minutes: Number(minutes),
-      seconds: Number(seconds),
-      timerId: null,
-    };
-  }
-
-  static toggleProperty(arr, id, propName) {
+  const toggleProperty = (arr, id, propName) => {
     const idx = arr.findIndex((el) => el.id === id);
 
     const oldItem = arr[idx];
     const newItem = { ...oldItem, [propName]: !oldItem[propName] };
 
     return [...arr.slice(0, idx), newItem, ...arr.slice(idx + 1)];
-  }
+  };
 
-  static filter = (items, filter) => {
-    switch (filter) {
+  const changeFilter = (items, value) => {
+    switch (value) {
       case 'all':
         return items;
       case 'active':
@@ -51,23 +57,20 @@ export default class App extends Component {
     }
   };
 
-  constructor() {
-    super();
-    this.state = {
-      todoData: [
-        App.createTodoItem('Completed task'),
-        App.createTodoItem('Editing task'),
-        App.createTodoItem('Active task'),
-      ],
-      filter: 'all',
-    };
-  }
+  const onToggleDone = (id) => {
+    setTask((prevTask) => toggleProperty(prevTask, id, 'description'));
+  };
 
-  countDown = (id) => {
-    this.setState(({ todoData }) => {
-      const idx = todoData.findIndex((item) => item.id === id);
-      const elem = todoData.find((el) => el.id === id);
-      const second = App.convertToSeconds(elem.minutes, elem.seconds);
+  const onToggleEdit = (id) => {
+    setTask((prevTask) => toggleProperty(prevTask, id, 'editing'));
+    setTask((prevTask) => toggleProperty(prevTask, id, 'timer'));
+  };
+
+  const countDown = (id) => {
+    setTask((prevState) => {
+      const idx = prevState.findIndex((item) => item.id === id);
+      const elem = prevState.find((el) => el.id === id);
+      const second = convertToSeconds(elem.minutes, elem.seconds);
 
       if (second && elem.timer) {
         if (elem.seconds) {
@@ -81,143 +84,111 @@ export default class App extends Component {
         }
       } else {
         elem.timer = false;
+        clearInterval(elem.timerId);
+        onToggleDone(elem.id);
       }
-      const newData = [...todoData.slice(0, idx), elem, ...todoData.slice(idx + 1)];
-      return {
-        todoData: newData,
-      };
+
+      const newData = [...prevState.slice(0, idx), elem, ...prevState.slice(idx + 1)];
+      return newData;
     });
   };
 
-  startTimer = (id) => {
-    this.setState(({ todoData }) => {
-      const elem = todoData.find((el) => el.id === id);
+  const startTimer = (id) => {
+    setTask((prevState) => {
+      const elem = prevState.find((el) => el.id === id);
       clearInterval(elem.timerId);
-      elem.timerId = setInterval(() => this.countDown(id), 1000);
+      elem.timerId = setInterval(() => countDown(id), 1000);
 
-      const newArray = [...todoData];
+      const newArray = [...prevState];
 
-      return {
-        todoData: newArray,
-      };
+      return newArray;
     });
   };
 
-  stopTimer = (id) => {
-    this.setState(({ todoData }) => {
-      const elem = todoData.find((el) => el.id === id);
+  const stopTimer = (id) => {
+    setTask((prevState) => {
+      const elem = prevState.find((el) => el.id === id);
       clearInterval(elem.timerId);
 
-      const newArray = [...todoData];
+      const newArray = [...prevState];
 
-      return {
-        todoData: newArray,
-      };
+      return newArray;
     });
   };
 
-  deleteAllItem = () => {
-    this.setState(({ todoData }) => {
-      todoData.forEach((elem) => clearInterval(elem.timerId));
-      const arr = todoData.filter((el) => !el.description);
+  const deleteAllItem = () => {
+    setTask((prevState) => {
+      prevState.forEach((elem) => clearInterval(elem.timerId));
+      const arr = prevState.filter((el) => !el.description);
       const newArray = [...arr];
-      todoData.forEach((elem) => clearInterval(elem.timerId));
-      return {
-        todoData: newArray,
-      };
+      prevState.forEach((elem) => clearInterval(elem.timerId));
+      return newArray;
     });
   };
 
-  deleteItem = (id) => {
-    this.setState(({ todoData }) => {
-      const idx = todoData.findIndex((el) => el.id === id);
-      const elem = todoData.find((el) => el.id === id);
+  const deleteItem = (id) => {
+    setTask((prevState) => {
+      const idx = prevState.findIndex((el) => el.id === id);
+      const elem = prevState.find((el) => el.id === id);
       clearInterval(elem.timerId);
 
-      const newArray = [...todoData.slice(0, idx), ...todoData.slice(idx + 1)];
+      const newArray = [...prevState.slice(0, idx), ...prevState.slice(idx + 1)];
 
-      return {
-        todoData: newArray,
-      };
+      return newArray;
     });
   };
 
-  addItem = (text, minutes, seconds) => {
-    const newItem = App.createTodoItem(App.ucFirst(text), minutes, seconds);
-    this.setState(({ todoData }) => {
-      const newArray = [newItem, ...todoData];
-      return {
-        todoData: newArray,
-      };
+  const addItem = (text, minutes, seconds) => {
+    const newItem = createTodoItem(ucFirst(text), minutes, seconds);
+    setTask((prevState) => {
+      const newArray = [newItem, ...prevState];
+      return newArray;
     });
   };
 
-  editLabel = (id, value, minutes, seconds) => {
-    this.setState(({ todoData }) => {
-      const elem = todoData.find((el) => el.id === id);
+  const editLabel = (id, value, minutes, seconds) => {
+    setTask((prevState) => {
+      const elem = prevState.find((el) => el.id === id);
       clearInterval(elem.timerId);
-      const newItem = App.createTodoItem(value, minutes, seconds);
-      const idx = todoData.findIndex((item) => item.id === id);
-      const newData = [...todoData.slice(0, idx), newItem, ...todoData.slice(idx + 1)];
-      return {
-        todoData: newData,
-      };
+      const newItem = createTodoItem(value, minutes, seconds);
+      const idx = prevState.findIndex((item) => item.id === id);
+      const newData = [...prevState.slice(0, idx), newItem, ...prevState.slice(idx + 1)];
+      return newData;
     });
   };
 
-  onToggleDone = (id) => {
-    this.setState(({ todoData }) => ({
-      todoData: App.toggleProperty(todoData, id, 'description'),
-    }));
+  const onFilterChange = (value) => {
+    setFilter(value);
   };
 
-  onToggleEdit = (id) => {
-    this.setState(({ todoData }) => ({
-      todoData: App.toggleProperty(todoData, id, 'editing'),
-    }));
-    this.setState(({ todoData }) => ({
-      todoData: App.toggleProperty(todoData, id, 'timer'),
-    }));
-  };
+  const visibleItems = changeFilter(task, filters);
+  const doneCount = task.filter((el) => el.description || el.editing).length;
+  const todoCount = task.length - doneCount;
 
-  onFilterChange = (filter) => {
-    this.setState({ filter });
-  };
+  const newTaskForm = <NewTaskForm onItemAdded={addItem} />;
+  const taskList = (
+    <TaskList
+      todos={visibleItems}
+      onDeleted={deleteItem}
+      onToggleDone={onToggleDone}
+      onToggleEdit={onToggleEdit}
+      onItemAdded={addItem}
+      onEditLabel={editLabel}
+      startTimer={startTimer}
+      stopTimer={stopTimer}
+    />
+  );
 
-  render() {
-    const { todoData, filter } = this.state;
-    const visibleItems = App.filter(todoData, filter);
-    const doneCount = todoData.filter((el) => el.description || el.editing).length;
-    const todoCount = todoData.length - doneCount;
+  const footer = (
+    <Footer
+      toDo={todoCount}
+      onAllDeleted={deleteAllItem}
+      filter={filters}
+      onFilterChange={onFilterChange}
+    />
+  );
 
-    return (
-      <div className="wrapper">
-        <section className="app">
-          <header className="header">
-            <TaskHeader />
-            <NewTaskForm onItemAdded={this.addItem} />
-          </header>
-          <section className="main">
-            <TaskList
-              todos={visibleItems}
-              onDeleted={this.deleteItem}
-              onToggleDone={this.onToggleDone}
-              onToggleEdit={this.onToggleEdit}
-              onItemAdded={this.addItem}
-              onEditLabel={this.editLabel}
-              startTimer={this.startTimer}
-              stopTimer={this.stopTimer}
-            />
-
-            <Footer
-              toDo={todoCount}
-              onAllDeleted={this.deleteAllItem}
-              filter={filter}
-              onFilterChange={this.onFilterChange}
-            />
-          </section>
-        </section>
-      </div>
-    );
-  }
+  return <Compos head={<TaskHeader />} form={newTaskForm} list={taskList} foot={footer} />;
 }
+
+export default App;

@@ -1,97 +1,89 @@
-import React, { Component } from 'react';
+import React, { useState, useEffect } from 'react';
 import './new-task-form.css';
 import PropTypes from 'prop-types';
 
-export default class TaskEdit extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      label: '',
-      minutes: '',
-      seconds: '',
-    };
+function TaskEdit({ onItemAdded }) {
+  const [label, setLabel] = useState('');
+  const [minutes, setMinutes] = useState('');
+  const [seconds, setSeconds] = useState('');
 
-    this.editInput = React.createRef();
-  }
+  const editInput = React.createRef();
 
-  componentDidMount() {
-    this.editInput.current.focus();
-  }
+  useEffect(() => {
+    editInput.current.focus();
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
-  inputHandler = (e) => {
+  const inputHandlerMinutes = (e) => {
     const reg = /[A-Za-zA-Яа-яЁё]/g;
-    this.setState({ [e.target.name]: e.target.value.replace(reg, '').substr(0, 2) });
+    const value = Number(e.target.value.replace(reg, '').substr(0, 2));
+    setMinutes(value);
   };
 
-  onLabelChange = (event) => {
-    this.setState({
-      label: event.target.value,
-    });
+  const inputHandlerSeconds = (e) => {
+    const reg = /[A-Za-zA-Яа-яЁё]/g;
+    const value = Number(e.target.value.replace(reg, '').substr(0, 2));
+    setSeconds(value);
   };
 
-  onSubmit = (event) => {
-    const { onItemAdded } = this.props;
-    const { label, minutes, seconds } = this.state;
+  const onLabelChange = (event) => {
+    setLabel(event.target.value);
+  };
+
+  const onSubmit = (event) => {
     event.preventDefault();
     if (event.keyCode === 27) {
-      this.setState({
-        label: '',
-        minutes: '',
-        seconds: '',
-      });
+      setLabel('');
+      setMinutes('');
+      setSeconds('');
     }
     if (event.keyCode === 13) {
       if (label.length > 0) {
         onItemAdded(label, minutes, seconds);
-        this.setState({
-          label: '',
-          minutes: '',
-          seconds: '',
-        });
+        setLabel('');
+        setMinutes('');
+        setSeconds('');
       }
     }
   };
 
-  render() {
-    const { label, minutes, seconds } = this.state;
-
-    return (
-      <div>
-        <form className="new-todo-form" onSubmit={this.onSubmit}>
-          <input
-            className="new-todo"
-            placeholder="What needs to be done?"
-            ref={this.editInput}
-            onChange={this.onLabelChange}
-            value={label}
-            onKeyUp={this.onSubmit}
-          />
-        </form>
-        <form>
-          <input
-            className="InputMin"
-            placeholder="Min"
-            value={minutes}
-            name="minutes"
-            onChange={this.inputHandler}
-            onKeyUp={this.onSubmit}
-            pattern="^[ 0-9]+$"
-          />
-          <input
-            className="InputSec"
-            placeholder="Sec"
-            value={seconds}
-            name="seconds"
-            onChange={this.inputHandler}
-            onKeyUp={this.onSubmit}
-            pattern="^[ 0-9]+$"
-          />
-        </form>
-      </div>
-    );
-  }
+  return (
+    <div>
+      <form className="new-todo-form" onSubmit={onSubmit}>
+        <input
+          className="new-todo"
+          placeholder="What needs to be done?"
+          ref={editInput}
+          onChange={onLabelChange}
+          value={label}
+          onKeyUp={onSubmit}
+        />
+      </form>
+      <form>
+        <input
+          className="InputMin"
+          placeholder="Min"
+          value={minutes}
+          name="minutes"
+          onChange={inputHandlerMinutes}
+          onKeyUp={onSubmit}
+          pattern="^[ 0-9]+$"
+        />
+        <input
+          className="InputSec"
+          placeholder="Sec"
+          value={seconds}
+          name="seconds"
+          onChange={inputHandlerSeconds}
+          onKeyUp={onSubmit}
+          pattern="^[ 0-9]+$"
+        />
+      </form>
+    </div>
+  );
 }
 
 TaskEdit.propTypes = {
   onItemAdded: PropTypes.func.isRequired,
 };
+
+export default TaskEdit;

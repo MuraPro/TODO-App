@@ -1,6 +1,6 @@
 import React from 'react';
-import './task-timer.css';
 import PropTypes from 'prop-types';
+import './task-timer.css';
 
 function TaskTimer({ minutes, seconds, startTimer, stopTimer }) {
   return (
@@ -16,8 +16,6 @@ function TaskTimer({ minutes, seconds, startTimer, stopTimer }) {
   );
 }
 
-export default TaskTimer;
-
 TaskTimer.defaultProps = {
   minutes: 1,
   seconds: 0,
@@ -26,4 +24,8 @@ TaskTimer.defaultProps = {
 TaskTimer.propTypes = {
   minutes: PropTypes.number,
   seconds: PropTypes.number,
+  startTimer: PropTypes.func.isRequired,
+  stopTimer: PropTypes.func.isRequired,
 };
+
+export default TaskTimer;
