@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { formatDistanceToNow } from 'date-fns';
+import classNames from 'classnames';
 import PropTypes from 'prop-types';
 import TaskTimer from '../task-timer';
 
@@ -51,18 +52,13 @@ function Task(props) {
     }
   };
 
-  let classNames = ' ';
-
-  if (description) {
-    classNames += ' description';
-  }
-
+  const wrappedClass = classNames({ description: description === true });
   return (
     <>
       <div className="view">
         <input className="toggle" type="checkbox" onClick={onToggleDone} />
         <label key={id} htmlFor="todo">
-          <span className={classNames} onClick={onToggleDone}>
+          <span className={wrappedClass} onClick={onToggleDone}>
             {task}
           </span>
           <TaskTimer

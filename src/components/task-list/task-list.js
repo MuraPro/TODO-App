@@ -1,4 +1,5 @@
 import React from 'react';
+import classNames from 'classnames';
 import PropTypes from 'prop-types';
 import Task from '../task';
 import './task-list.css';
@@ -10,13 +11,9 @@ function TaskList(props) {
   const elements = todos.map((item) => {
     const { id, editing, minutes, seconds, ...others } = item;
 
-    let classNames = 'completed';
-    if (editing) {
-      classNames = 'editing';
-    }
-
+    const wrappedClass = classNames('completed', { editing: editing === true });
     return (
-      <li key={id} className={classNames}>
+      <li key={id} className={wrappedClass}>
         <Task
           {...others}
           onDeleted={() => onDeleted(id)}
