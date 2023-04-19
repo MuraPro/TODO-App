@@ -5,8 +5,16 @@ import Task from '../task';
 import './task-list.css';
 
 function TaskList(props) {
-  const { todos, onToggleDone, onToggleEdit, onDeleted, onEditLabel, stopTimer, startTimer } =
-    props;
+  const {
+    todos,
+    onToggleDone,
+    onToggleEdit,
+    onDeleted,
+    onEditLabel,
+    stopTimer,
+    startTimer,
+    onInputChange,
+  } = props;
 
   const elements = todos.map((item) => {
     const { id, editing, minutes, seconds, ...others } = item;
@@ -19,12 +27,13 @@ function TaskList(props) {
           onDeleted={() => onDeleted(id)}
           onToggleDone={() => onToggleDone(id)}
           onToggleEdit={() => onToggleEdit(id)}
-          onEditLabel={(value) => onEditLabel(id, value, minutes, seconds)}
+          onEditLabel={(value) => onEditLabel(id, value)}
           minutes={minutes}
           seconds={seconds}
           editing={editing}
           startTimer={() => startTimer(id)}
           stopTimer={() => stopTimer(id)}
+          onInputChange={() => onInputChange(id)}
         />
       </li>
     );

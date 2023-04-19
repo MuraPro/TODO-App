@@ -24,7 +24,6 @@ function App() {
     createTodoItem('Editing task'),
     createTodoItem('Active task'),
   ]);
-  Array.from(task);
 
   const [filters, setFilter] = useState('all');
 
@@ -61,9 +60,12 @@ function App() {
     setTask((prevTask) => toggleProperty(prevTask, id, 'description'));
   };
 
+  const onInputChange = (id) => {
+    setTask((prevTask) => toggleProperty(prevTask, id, 'checked'));
+  };
+
   const onToggleEdit = (id) => {
     setTask((prevTask) => toggleProperty(prevTask, id, 'editing'));
-    setTask((prevTask) => toggleProperty(prevTask, id, 'timer'));
   };
 
   const countDown = (id) => {
@@ -86,6 +88,7 @@ function App() {
         elem.timer = false;
         clearInterval(elem.timerId);
         onToggleDone(elem.id);
+        elem.checked = true;
       }
 
       const newData = [...prevState.slice(0, idx), elem, ...prevState.slice(idx + 1)];
@@ -146,12 +149,11 @@ function App() {
     });
   };
 
-  const editLabel = (id, value, minutes, seconds) => {
+  const editLabel = (id, text) => {
     setTask((prevState) => {
-      const elem = prevState.find((el) => el.id === id);
-      clearInterval(elem.timerId);
-      const newItem = createTodoItem(value, minutes, seconds);
-      const idx = prevState.findIndex((item) => item.id === id);
+      const idx = prevState.findIndex((el) => el.id === id);
+      const oldItem = prevState[idx];
+      const newItem = { ...oldItem, label: text };
       const newData = [...prevState.slice(0, idx), newItem, ...prevState.slice(idx + 1)];
       return newData;
     });
@@ -176,6 +178,7 @@ function App() {
       onEditLabel={editLabel}
       startTimer={startTimer}
       stopTimer={stopTimer}
+      onInputChange={onInputChange}
     />
   );
 

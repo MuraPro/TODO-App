@@ -20,6 +20,8 @@ function Task(props) {
     onEditLabel,
     onToggleDone,
     onDeleted,
+    checked,
+    onInputChange,
   } = props;
 
   const editInput = React.createRef();
@@ -28,7 +30,7 @@ function Task(props) {
 
   useEffect(() => {
     setTask(label);
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [label]); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
     editInput.current.focus();
@@ -41,7 +43,7 @@ function Task(props) {
   const onSubmit = (event) => {
     event.preventDefault();
     onToggleEdit();
-    onEditLabel(task, minutes, seconds);
+    onEditLabel(task);
     setTask('');
   };
 
@@ -56,7 +58,13 @@ function Task(props) {
   return (
     <>
       <div className="view">
-        <input className="toggle" type="checkbox" onClick={onToggleDone} />
+        <input
+          className="toggle"
+          type="checkbox"
+          onClick={onToggleDone}
+          defaultChecked={checked}
+          onChange={onInputChange}
+        />
         <label key={id} htmlFor="todo">
           <span className={wrappedClass} onClick={onToggleDone}>
             {task}
